@@ -1,0 +1,59 @@
+{
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true,
+    "jasmine": true,
+    "commonjs": true
+  },
+  "extends": "airbnb",
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-undef": "error",
+    "prefer-arrow-callback": [
+      "error",
+      {
+        "allowUnboundThis": false
+      }
+    ],
+    "eol-last": 2,
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
+    "brace-style": [
+      "error",
+      "1tbs",
+      {
+        "allowSingleLine": true
+      }
+    ],
+    "object-shorthand": "error",
+    "key-spacing": [
+      "error",
+      {
+        "beforeColon": false
+      }
+    ],
+    "indent": [
+      "error",
+      2
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "no-console": "off",
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ]
+  },
+  "parserOptions": {
+    "ecmaVersion": 2019
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "ethblock-store",
+  "version": "0.0.0",
+  "author": "Sachin Chavan <chavansachin295@gmail.com>",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "dotenv": "^8.0.0",
+    "ejs": "~2.5.7",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "mongoose": "^5.6.9",
+    "morgan": "~1.9.0",
+    "web3": "^1.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1",
+    "pm2": "^3.5.1"
+  }
+}
