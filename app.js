@@ -5,56 +5,60 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const Web3 = require('web3');
-const mongoose = require('mongoose');
+
 require('dotenv').config();
 
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes');
+const Model = require('./models');
+
+const model = new Model();
 
 const app = express();
-
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
-const db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log('CONNECTED TO MONGO DB');
-});
-
-const Block = mongoose.model('block', {
-  blockNumber: Number,
-  from: String,
-  to: String,
-  transactionHash: String,
-});
-
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.PROVIDER_URI));
-
-web3.setProvider(new Web3.providers.WebsocketProvider(`ws://${process.env.PROVIDER_URI}`));
+const web3 = new Web3('https://mainnet.infura.io/hqRzEqFKv6IsjRxfVUWH');
 
 console.log(web3.eth.defaultBlock);
-web3.eth.getBlockNumber().then(console.log);
-web3.eth.getBlock('latest')
-  .then((block) => {
-    console.log('CL: block', block);
-    web3.eth.getTransaction(block.transactions[0])
-      .then((transaction) => {
-        console.log('CL: block', transaction);
-        const newBlock = new Block({
-          blockNumber: 3 || transaction.number,
-          from: '0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b' || transaction.from,
-          to: '0x6295ee1b4f6dd65047762f924ecd367c17eabf8f' || transaction.to,
-          transactionHash: '0x9fc76417374aa880d4449a1f7f31ec597f00b1f6f3dd2d66f4c9c6c445836d8b§234' || block.transactions[0],
+web3.eth.getBlockNumber();
+// web3.eth.getBlockNumber().then(console.log);
+// change this to async await
+web3.eth.getBlockNumber().then((latest) => {
+  for (let i = 0; i < 10; i += 1) {
+    //     web3.eth.getBlock(latest - i).then(console.log);
+    web3.eth.getBlock('latest')
+      .then((block) => {
+        console.log('CL: block', block);
+        // add foreach transactions
+        block.transactions.forEach((datum) => {
+          web3.eth.getTransaction(datum)
+            .then((transaction) => {
+              console.log('CL: transaction', transaction);
+              model.store(transaction, datum);
+            })
+            .catch((error) => {
+              console.log('CL: error', error);
+            });
         });
-        newBlock.save().then(() => console.log('Saved data in DB'));
       })
       .catch((error) => {
         console.log('CL: error', error);
       });
-  })
-  .catch((error) => {
-    console.log('CL: error', error);
-  });
-// web3.eth.getBlock(3150).then(console.log);
+  }
+});
+// web3.eth.getBlock('latest')
+//   .then((block) => {
+//     console.log('CL: block', block);
+//     // add foreach transactions
+//     web3.eth.getTransaction(block.transactions[0])
+//       .then((transaction) => {
+//         console.log('CL: block', transaction);
+//         model.store(transaction, block.transactions[0]);
+//       })
+//       .catch((error) => {
+//         console.log('CL: error', error);
+//       });
+//   })
+//   .catch((error) => {
+//     console.log('CL: error', error);
+//   });
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

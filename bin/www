@@ -5,7 +5,7 @@
  * Module dependencies.
  */
 
-const debug = require('debug')('matic-nw-task:server');
+const debug = require('debug')('ethblock-store:server');
 const http = require('http');
 const app = require('../app');
 
