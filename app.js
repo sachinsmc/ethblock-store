@@ -18,9 +18,9 @@ const web3 = new Web3(process.env.PROVIDER_URI);
 
 console.log(web3.eth.defaultBlock);
 web3.eth.getBlockNumber();
-// change this to async await
 web3.eth.getBlockNumber().then((latest) => {
-  for (let i = 0; i < 50; i += 1) {
+  // for (let i = 0; i < 10000; i += 1) {
+  for (let i = 0; i < 10; i += 1) {
     web3.eth.getBlock(latest - i)
       .then((block) => {
         console.log('CL: block', block);
@@ -65,12 +65,5 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
-// function getBlock() {
-//   web3.eth.getBlock().then(console.log).catch((error) => {
-//     console.log('CL: error', error);
-//     web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.PROVIDER_URI));
-//     getBlock();
-//   });
-// }
 
 module.exports = app;
