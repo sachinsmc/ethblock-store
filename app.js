@@ -14,19 +14,16 @@ const Model = require('./models');
 const model = new Model();
 
 const app = express();
-const web3 = new Web3('https://mainnet.infura.io/hqRzEqFKv6IsjRxfVUWH');
+const web3 = new Web3(process.env.PROVIDER_URI);
 
 console.log(web3.eth.defaultBlock);
 web3.eth.getBlockNumber();
-// web3.eth.getBlockNumber().then(console.log);
 // change this to async await
 web3.eth.getBlockNumber().then((latest) => {
-  for (let i = 0; i < 10; i += 1) {
-    //     web3.eth.getBlock(latest - i).then(console.log);
-    web3.eth.getBlock('latest')
+  for (let i = 0; i < 50; i += 1) {
+    web3.eth.getBlock(latest - i)
       .then((block) => {
         console.log('CL: block', block);
-        // add foreach transactions
         block.transactions.forEach((datum) => {
           web3.eth.getTransaction(datum)
             .then((transaction) => {
@@ -43,22 +40,6 @@ web3.eth.getBlockNumber().then((latest) => {
       });
   }
 });
-// web3.eth.getBlock('latest')
-//   .then((block) => {
-//     console.log('CL: block', block);
-//     // add foreach transactions
-//     web3.eth.getTransaction(block.transactions[0])
-//       .then((transaction) => {
-//         console.log('CL: block', transaction);
-//         model.store(transaction, block.transactions[0]);
-//       })
-//       .catch((error) => {
-//         console.log('CL: error', error);
-//       });
-//   })
-//   .catch((error) => {
-//     console.log('CL: error', error);
-//   });
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
